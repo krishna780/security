@@ -28,9 +28,11 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication!=null){
             SecretKey secretKey = Keys.hmacShaKeyFor(JWT_KEY.getBytes(StandardCharsets.UTF_8));
-            String jwt = Jwts.builder().setIssuer("bank").setSubject("JWT Token")
+            String jwt = Jwts.builder().setIssuer("bank")
+                    .setSubject("JWT Token")
                     .claim("username", authentication.getName())
-                    .claim("authorities", populateAuthorities(authentication.getAuthorities()))
+                    .claim("authorities",
+                            populateAuthorities(authentication.getAuthorities()))
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(new Date().getTime() + 3000))
                     .signWith(secretKey).compact();
